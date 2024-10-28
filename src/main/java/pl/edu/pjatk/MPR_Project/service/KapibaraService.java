@@ -14,11 +14,13 @@ import java.util.Optional;
 public class KapibaraService {
 
     private KapibaraRepository kapibaraRepository;
+    private StringUtilsService stringUtilsService;
     List<Kapibara> kapibaraList = new ArrayList<>();
 
     @Autowired
-    public KapibaraService(KapibaraRepository repository) {
+    public KapibaraService(KapibaraRepository repository, StringUtilsService stringUtilsService) {
         this.kapibaraRepository = repository;
+        this.stringUtilsService = stringUtilsService;
 
         this.kapibaraRepository.save(new Kapibara("Gord", "brązowy"));
         this.kapibaraRepository.save(new Kapibara("Adam", "złoty"));
@@ -34,14 +36,20 @@ public class KapibaraService {
     }
 
     public void addKapibara(Kapibara kapibara) {
+        kapibara.setName(this.stringUtilsService.toUpperCase(kapibara.getName()));
+        kapibara.setColor(this.stringUtilsService.toUpperCase(kapibara.getColor()));
         this.kapibaraRepository.save(kapibara);
     }
 
     public Optional<Kapibara> get(Long id) {
-        return this.kapibaraRepository.findById(id);
+        Optional<Kapibara> kapi = this.kapibaraRepository.findById(id);
+        if (kapi.isPresent()) {
+            kapi.get().setName(this.stringUtilsService.toLowerCase(kapi.get().getName()));
+            kapi.get().setColor(this.stringUtilsService.toLowerCase(kapi.get().getColor()));
+        }
+        return kapi;
     }
 
-    ;
 
     public void killKapibara(Long id) {
         if (this.kapibaraRepository.existsById(id)) {
