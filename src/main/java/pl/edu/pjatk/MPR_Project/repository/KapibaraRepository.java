@@ -10,4 +10,5 @@ import java.util.List;
 //@Component
 public interface KapibaraRepository extends CrudRepository<Kapibara, Long>  {//<-typ generyczny <>
   public List<Kapibara> findByName(String name); //sprawdz w obiekcie kapibara czy znajduje się dane imię
+  public List<Kapibara> findByIdentyfikator(Long identyfikator);
 }

@@ -2,10 +2,11 @@ package pl.edu.pjatk.MPR_Project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.edu.pjatk.MPR_Project.exception.KapibaraExist;
+import pl.edu.pjatk.MPR_Project.exception.KapibaraNotFoundException;
 import pl.edu.pjatk.MPR_Project.model.Kapibara;
 import pl.edu.pjatk.MPR_Project.repository.KapibaraRepository;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,6 @@ public class KapibaraService {
 
     private KapibaraRepository kapibaraRepository;
     private StringUtilsService stringUtilsService;
-    List<Kapibara> kapibaraList = new ArrayList<>();
 
     @Autowired
     public KapibaraService(KapibaraRepository repository, StringUtilsService stringUtilsService) {
@@ -28,7 +28,11 @@ public class KapibaraService {
     }
 
     public List<Kapibara> getKapibaraByName(String name) {
-        return this.kapibaraRepository.findByName(name);
+        List<Kapibara> kapibaraList = this.kapibaraRepository.findByName(name);
+        if(kapibaraList.isEmpty()) {
+            throw new KapibaraNotFoundException();
+        }
+        return kapibaraList;
     }
 
     public List<Kapibara> getAllKapibaras() {
@@ -36,18 +40,29 @@ public class KapibaraService {
     }
 
     public void addKapibara(Kapibara kapibara) {
+        List<Kapibara> kapibaraList = this.kapibaraRepository.findByIdentyfikator(kapibara.getIdentyfikator());
+        if(!kapibaraList.isEmpty()) {
+            throw new KapibaraExist();
+        }
+        // a teraz sprawdz czy pola sa puste
+
         kapibara.setName(this.stringUtilsService.toUpperCase(kapibara.getName()));
         kapibara.setColor(this.stringUtilsService.toUpperCase(kapibara.getColor()));
         this.kapibaraRepository.save(kapibara);
+
     }
 
-    public Optional<Kapibara> get(Long id) {
+    public Kapibara get(Long id) {
         Optional<Kapibara> kapi = this.kapibaraRepository.findById(id);
         if (kapi.isPresent()) {
             kapi.get().setName(this.stringUtilsService.toLowerCase(kapi.get().getName()));
             kapi.get().setColor(this.stringUtilsService.toLowerCase(kapi.get().getColor()));
         }
-        return kapi;
+        //jeśli nie ma kapibary -> wyrzuca błąd
+        if(kapi.isEmpty()){
+            throw new KapibaraNotFoundException();
+        }
+        return kapi.get();
     }
 
 
