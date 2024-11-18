@@ -53,4 +53,9 @@ public class MyRestController {
         this.kapibaraService.updateKapibara(id, kapibara);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    //------------------------------------------------------------------//
+//    @GetMapping("file/{id}")
+//    ResponseEntity<byte[]> getFile(@PathVariable Long id){
+//
+//    }
 }//sprawdzić czy jest i użyć save jeśli jest
