@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kapibara</title>
+</head>
+<body>
+<h1>Choose kapibara!</h1>
+<h2>We're going to give her up!</h2>
+<h3>Yaaaaaaay!</h3>
+<form action="#" th:action="@{giveUpKapibara}" th:object="${kapibara}" method="post">
+  <input type="text" placeholder="id" th:field="${kapibara.id}">
+  <input type="submit" value="submit">
+</form>
+</body>
+</html>
