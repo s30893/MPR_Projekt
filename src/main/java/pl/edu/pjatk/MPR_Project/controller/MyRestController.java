@@ -1,22 +1,28 @@
 package pl.edu.pjatk.MPR_Project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pjatk.MPR_Project.model.Kapibara;
 import pl.edu.pjatk.MPR_Project.service.KapibaraService;
+import pl.edu.pjatk.MPR_Project.service.PdfService;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class MyRestController {
     private KapibaraService kapibaraService;
+    private PdfService pdfService;
 
     @Autowired
-    public MyRestController(KapibaraService kapibaraService) {
+    public MyRestController(KapibaraService kapibaraService , PdfService pdfService) {
         this.kapibaraService = kapibaraService;
+        this.pdfService = pdfService;
     }
     @GetMapping("kapibara/all")//daje  wszystkie kapibary na BD
     public ResponseEntity<List<Kapibara>> getAll(){
@@ -53,9 +59,14 @@ public class MyRestController {
         this.kapibaraService.updateKapibara(id, kapibara);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    //------------------------------------------------------------------//
-//    @GetMapping("file/{id}")
-//    ResponseEntity<byte[]> getFile(@PathVariable Long id){
-//
-//    }
+    @GetMapping("kapibara/{id}/pdf")
+    public ResponseEntity<byte[]> getKapibaraAsPdf(@PathVariable Long id) {
+        Kapibara kapibara = kapibaraService.get(id);
+        ByteArrayOutputStream pdfOutput = pdfService.generateKapibaraPdf(kapibara);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"kapibara_" + id + ".pdf\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfOutput.toByteArray());
+    }
 }//sprawdzić czy jest i użyć save jeśli jest

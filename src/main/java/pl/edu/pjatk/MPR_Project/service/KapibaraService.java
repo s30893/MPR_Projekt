@@ -26,7 +26,7 @@ public class KapibaraService {
         this.kapibaraRepository.save(new Kapibara("Adam", "złoty"));
         //kapibaraList.add(new Kapibara("name", "color")); - stara wersja pracy z listą
     }
-
+    //tested and exception
     public List<Kapibara> getKapibaraByName(String name) {
         List<Kapibara> kapibaraList = this.kapibaraRepository.findByName(name);
         if(kapibaraList.isEmpty()) {
@@ -34,11 +34,15 @@ public class KapibaraService {
         }
         return kapibaraList;
     }
-
+    //tested and exception
     public List<Kapibara> getAllKapibaras() {
-        return (List<Kapibara>) this.kapibaraRepository.findAll();
+        List<Kapibara> kapibaraList = (List<Kapibara>) this.kapibaraRepository.findAll();
+        if(kapibaraList.isEmpty()){
+            throw new KapibaraNotFoundException();
+        }
+        return kapibaraList;
     }
-
+    //tested and exception
     public void addKapibara(Kapibara kapibara) {
         List<Kapibara> kapibaraList = this.kapibaraRepository.findByIdentyfikator(kapibara.getIdentyfikator());
         if(!kapibaraList.isEmpty()) {
@@ -51,7 +55,7 @@ public class KapibaraService {
         this.kapibaraRepository.save(kapibara);
 
     }
-
+    //tested and exception
     public Kapibara get(Long id) {
         Optional<Kapibara> kapi = this.kapibaraRepository.findById(id);
         if (kapi.isPresent()) {
@@ -65,22 +69,24 @@ public class KapibaraService {
         return kapi.get();
     }
 
-
+    //tested and exception
     public void killKapibara(Long id) {
         if (this.kapibaraRepository.existsById(id)) {
             this.kapibaraRepository.deleteById(id);
-        } else {
-            System.out.println(" ");
+        }else{
+            throw new KapibaraNotFoundException();
         }
     }
 
-
+    //tested and exception
     public void updateKapibara(Long id, Kapibara kapibara) {
         Optional<Kapibara> kapibaraSchrodingera = this.kapibaraRepository.findById(id);
         if (kapibaraSchrodingera.isPresent()) {
             kapibaraSchrodingera.get().setName(kapibara.getName());
             kapibaraSchrodingera.get().setColor(kapibara.getColor());
             this.kapibaraRepository.save(kapibara);
+        }else{
+            throw new KapibaraNotFoundException();
         }
     }
 }
