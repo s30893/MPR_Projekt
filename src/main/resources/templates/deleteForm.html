@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kapibara</title>
+</head>
+<body>
+<h1>Choose kapibara!</h1>
+<h2>We're going to give her up!</h2>
+<h3>Yaaaaaaay!</h3>
+<form action="#" th:action="@{/deleteForm}" th:object="${kapibara}" method="post">
+    <input type="number" placeholder="ID" th:field="*{id}" />
+    <input type="submit" value="Submit" />
+</form>
+</body>
+</html>
