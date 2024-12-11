@@ -2,10 +2,7 @@ package pl.edu.pjatk.MPR_Project.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.edu.pjatk.MPR_Project.model.Kapibara;
 import pl.edu.pjatk.MPR_Project.service.KapibaraService;
 
@@ -36,9 +33,28 @@ public class MyViewController {
         this.kapibaraService.addKapibara(kapibara);
         return "redirect:/view/all";
     }
-    @DeleteMapping("/giveUpKapibara")
-    public String deleteKapibara(Model model) {
+    @GetMapping("/deleteForm")
+    public String displayDeleteForm(Model model) {
         model.addAttribute("kapibara", new Kapibara());
-        return "giveUpKapibara";
+        return "deleteForm";
     }
+    @PostMapping("/deleteForm")
+    public String deleteKapibra(@ModelAttribute Kapibara kapibara){
+        this.kapibaraService.killKapibara(kapibara.getId());
+        return "redirect:/view/all";
+    }
+    @GetMapping("/updateForm")
+
+    public String displayUpdateForm(@RequestParam Long id, Model model) {
+        Kapibara kapibara = kapibaraService.get(id);
+        model.addAttribute("kapibara", kapibara);
+        return "updateForm";
+    }
+
+    @PostMapping("/updateForm")
+    public String submitUpdateForm(@ModelAttribute Kapibara kapibara) {
+        kapibaraService.updateKapibara(kapibara.getId(), kapibara);
+        return "redirect:/view/all";
+    }
+
 }
