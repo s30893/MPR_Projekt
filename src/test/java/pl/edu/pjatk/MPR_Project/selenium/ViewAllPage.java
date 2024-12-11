@@ -18,4 +18,9 @@ public class ViewAllPage {
     public String getHeaderText(){
         return this.header.getText();
     }
+
+    public ViewAllPage open(){
+        this.webDriver.get("http://localhost:8080/addForm");
+        return this;
+    }
 }
