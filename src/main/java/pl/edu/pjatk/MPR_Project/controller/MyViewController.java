@@ -34,22 +34,24 @@ public class MyViewController {
         return "redirect:/view/all";
     }
     @GetMapping("/deleteForm")
-    public String displayDeleteForm(Model model) {
-        model.addAttribute("kapibara", new Kapibara());
-        return "deleteForm";
-    }
-    @PostMapping("/deleteForm")
-    public String deleteKapibra(@ModelAttribute Kapibara kapibara){
-        this.kapibaraService.killKapibara(kapibara.getId());
+    public String displayDeleteForm(@RequestParam Long id) {
+        this.kapibaraService.killKapibara(id);
         return "redirect:/view/all";
     }
-    @GetMapping("/updateForm")
+//    @PostMapping("/deleteForm")
+//    public String deleteKapibra(@ModelAttribute Kapibara kapibara){
+//        this.kapibaraService.killKapibara(kapibara.getId());
+//        return "redirect:/view/all";
+//    }
 
+    @GetMapping("/updateForm")
     public String displayUpdateForm(@RequestParam Long id, Model model) {
         Kapibara kapibara = kapibaraService.get(id);
         model.addAttribute("kapibara", kapibara);
         return "updateForm";
     }
+
+
 
     @PostMapping("/updateForm")
     public String submitUpdateForm(@ModelAttribute Kapibara kapibara) {
