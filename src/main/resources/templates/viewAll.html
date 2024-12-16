@@ -20,7 +20,7 @@
         <td th:text="${kapibara.name}"></td>
         <td th:text="${kapibara.color}"></td>
         <td>
-            <a th:href="@{/updateForm(id=${kapibara.id})}" class="btn btn-info">Update</a>
+            <a th:href="@{/updateForm(id=${kapibara.id})}" class="btn btn-info" id="updateButton">Update</a>
             <a th:href="@{/deleteForm(id=${kapibara.id})}" class="btn btn-danger ml-2">Delete</a>
         </td>
     </tr>

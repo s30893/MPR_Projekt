@@ -38,11 +38,6 @@ public class MyViewController {
         this.kapibaraService.killKapibara(id);
         return "redirect:/view/all";
     }
-//    @PostMapping("/deleteForm")
-//    public String deleteKapibra(@ModelAttribute Kapibara kapibara){
-//        this.kapibaraService.killKapibara(kapibara.getId());
-//        return "redirect:/view/all";
-//    }
 
     @GetMapping("/updateForm")
     public String displayUpdateForm(@RequestParam Long id, Model model) {
